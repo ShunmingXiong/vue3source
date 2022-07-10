@@ -1,0 +1,24 @@
+const fs = require('fs')
+const execa = require('execa')//开启子进程
+
+let targets = fs.readdirSync('packages').filter(f=>{
+    if(!fs.statSync(`packages/${f}`).isDirectory()){
+        return false
+    }
+    return true
+})
+
+async function build(target){ // rollup  -c --environment TARGET:shated
+    await execa('rollup',['-c','--environment',`TARGET:${target}`],{stdio:'inherit'}); // 当子进程打包的信息共享给父进程
+}
+
+function runParallel(targets,iteratorFn){
+    const res = []
+    for(const item of targets){
+        const p = iteratorFn(item)
+        res.push(p)
+    }
+    return Promise.all(res)
+}
+//对目标进行并行打包
+runParallel(targets,build)
