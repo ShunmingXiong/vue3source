@@ -5,6 +5,7 @@ var reactivity_1 = require("@vue/reactivity");
 var shapeFlag_1 = require("packages/shared/src/shapeFlag");
 var apiCreateApp_1 = require("./apiCreateApp");
 var component_1 = require("./component");
+var scheduler_1 = require("./scheduler");
 var vode_1 = require("./vode");
 function createRender(rendererOptions) {
     var hostInsert = rendererOptions.insert, hostRemove = rendererOptions.remove, hostPatchProp = rendererOptions.patchProp, hostCreateElement = rendererOptions.createElement, hostCreateText = rendererOptions.createText, hostCreateComment = rendererOptions.createComment, hostSetText = rendererOptions.setText, hostSetElementText = rendererOptions.setElementText;
@@ -21,8 +22,7 @@ function createRender(rendererOptions) {
             else {
                 //更新逻辑
             }
-        });
-        instance.render();
+        }, { scheduler: scheduler_1.queueJob });
     };
     var mountComponent = function (initialVNode, container) {
         //组件的渲染流程

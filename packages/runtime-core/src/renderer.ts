@@ -2,6 +2,7 @@ import { effect } from '@vue/reactivity'
 import { ShapeFlags } from 'packages/shared/src/shapeFlag'
 import { createAppAPI } from './apiCreateApp'
 import { createComponentInstance, setupComponent } from './component'
+import { queueJob } from './scheduler'
 import { normalizeVNode } from './vode'
 export function createRender(rendererOptions){//告诉core怎么渲染
     const {
@@ -26,8 +27,7 @@ export function createRender(rendererOptions){//告诉core怎么渲染
             }else{
                 //更新逻辑
             }
-        })
-        instance.render()
+        },{scheduler:queueJob})
     }
     
     const mountComponent = (initialVNode,container) => {
